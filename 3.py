@@ -2,22 +2,21 @@ import asyncio
 import random
 from typing import List
 
-# Разделяемое между запросами состояние сервера
+
+# Разделяемое состояние
 class SharedState:
     items: List[int]
 
     def __init__(self):
         self.items = []
 
-    # функция, модифицирующая состояние сервера
-    # asyncio.sleep используется для имитации долгой работы функции
+    # модификация состояния сервера
     async def modify(self, value: int):
         await asyncio.sleep(random.randint(1, 2))
         self.items.append(value)
 
-# Имитация сервера, обрабатывающего запросы
-# В нашем случае "запросы" модифицируют состояние сервера
-# добавляя элементы в конец списка 'items'
+
+# Имитация сервера. В нашем случае "запросы" модифицируют состояние сервера добавляя элементы в конец списка 'items'
 class Server:
     state: SharedState
 
@@ -32,15 +31,12 @@ async def main():
     state = SharedState()
     server = Server(state)
 
-    # имитируем запуск 10 запросов к серверу
+    # запуск 10 запросов к серверу
     requests = [server.handle_request(value) for value in range(10)]
     await asyncio.gather(*requests)
 
-    '''
-    !!! В данной задаче нельзя модифицировать код - только добавлять новый !!!
-    
-    задача заключается в том, чтобы только средствами asyncio
-    заставить запросы работать последовательно (исключить data race)
+    '''    
+    Ваша задача заключается в том, чтобы используя только asyncio исключить data race
     state в результате обработки запросов должен удовлетворять следующему условию:
     '''
     print(state.items == [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
