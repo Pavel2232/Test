@@ -23,18 +23,18 @@ class Server:
     def __init__(self, state: SharedState):
         self.state = state
 
-    async def handle_request(self, value: int):
-        await self.state.modify(value)
+    async def handle_request(self, value: int, lock):
+        async with lock:
+            await self.state.modify(value)
 
 
 async def main():
     state = SharedState()
     server = Server(state)
-
     # запуск 10 запросов к серверу
-    requests = [server.handle_request(value) for value in range(10)]
-    await asyncio.gather(*requests)
-
+    lock = asyncio.Lock()
+    requests = [server.handle_request(value,lock) for value in range(10)]
+    await asyncio.gather(*requests, return_exceptions=True)
     '''    
     Ваша задача заключается в том, чтобы используя только asyncio исключить data race
     state в результате обработки запросов должен удовлетворять следующему условию:

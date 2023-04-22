@@ -1,3 +1,8 @@
+from pathlib import Path
+
+
+BASE_DIR = Path(__file__).resolve().parent.joinpath('test.json')
+
 def count_questions(data: dict):
     # вывести количество вопросов (questions)
     pass
@@ -14,12 +19,13 @@ def print_max_answer_time(data: dict):
 
 
 def main(args):
-    data = {} # загрузить данные из test.json файла
+    data = {BASE_DIR.joinpath('test.json')} # загрузить данные из test.json файла
     count_questions(data)
     print_right_answers(data)
     print_max_answer_time(data)
-
-
+#
+#
 if __name__ == '__main__':
     # передать имя файла из аргументов командной строки
-    main()
+    a = ...
+    main(a)

@@ -2,7 +2,16 @@ from functools import wraps
 
 
 def cls_method_decorator(param: int):
-    pass
+    def get_func(func):
+        def wrapper(*args, **kwargs):
+            cls.increment_var(param)
+            return func(*args, **kwargs)
+        return wrapper
+    return get_func
+
+
+
+
 
 
 class SomeClass:

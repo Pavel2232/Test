@@ -3,6 +3,7 @@ import os
 
 def black_book(page: int):
     status_code = os.system(f"./black-book -n {page}")
+    print(status_code)
     return True if status_code == 0 else False
 
 
@@ -23,6 +24,15 @@ def main():
     
     Важно: написать наиболее эффективный алгоритм (по числу итераций)
     """
+    left = 1
+    right = 10000000
+    while left < right:
+        mid = (left + right + 1) // 2
+        if black_book(mid):
+            left = mid
+        else:
+            right = mid - 1
+    return f'Последняя страниц: {left}'
 
 
 if __name__ == '__main__':
